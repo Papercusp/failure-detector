@@ -70,7 +70,7 @@ export async function indirectProbe<P>(
   const deadBy: string[] = [];
   const unreachable: string[] = [];
   settled.forEach((res, i) => {
-    const lbl = label(chosen[i]);
+    const lbl = label(chosen[i]!); // settled is chosen.map(...) — same length, [i] always present (noUncheckedIndexedAccess-safe)
     if (res.status === 'fulfilled') {
       (res.value ? confirmedBy : deadBy).push(lbl);
     } else {
