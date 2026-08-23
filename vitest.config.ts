@@ -1,8 +1,6 @@
-import { defineConfig } from 'vitest/config';
+import { defineVitestConfig } from '@papercusp/test-config/vitest-config';
 
-export default defineConfig({
-  test: {
-    include: ['src/**/*.test.ts'],
-    environment: 'node',
-  },
+export default defineVitestConfig({
+  layer: 'unit',
+  include: ['src/**/*.test.ts'],
 });
