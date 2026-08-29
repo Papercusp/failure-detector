@@ -21,3 +21,17 @@ dist/
 **/.papercusp/logs/
 **/.papercusp/bench-reports/
 **/.papercusp/pi-sessions/
+
+# WI-761481 (2026-08-29): the SAME submodule-reach gap as above, for the Vite/Vitest
+# cache dir. `defineVitestConfig` sets `cacheDir: '.vitest-tmp'` (a deliberate local
+# path — TMPDIR is read-only on the dev box), so every workspace using the shared
+# config writes .vitest-tmp/ at ITS OWN root. The superproject ignores that path, but
+# that does not reach inside a submodule, and the WI-4419 block above only covers
+# .papercusp/* — so .vitest-tmp/vitest/<hash>/results.json got COMMITTED in 7 generic
+# submodules. That file records a per-run `duration`, so it changes on EVERY test run;
+# because it is tracked, it lands in the affected-tests dependency closure and flips
+# the passing-task verdict fingerprint every run. Measured: the cross-run reuse cache
+# could NEVER hit (`reason=cross-run:dependency-closure-changed`, hits=0). Keep both
+# forms: a slash-bearing pattern is anchored to THIS file's directory.
+.vitest-tmp/
+**/.vitest-tmp/
